@@ -6,8 +6,9 @@ test.beforeEach(async ({ page }) => {
 
   // Explicitly wait for the Welcome Banner to appear and click it
   const welcomeBanner = page.locator('button[aria-label="Close Welcome Banner"]');
-if (await welcomeBanner.isVisible()) {
+  if (await welcomeBanner.isVisible()) {
     await welcomeBanner.click();
+  }
 
   // Dismiss cookie consent if present
   const cookieConsent = page.locator('a[aria-label="dismiss cookie message"]');
@@ -15,7 +16,6 @@ if (await welcomeBanner.isVisible()) {
     await cookieConsent.click();
   }
 });
-
 test('should successfully navigate to the homepage', async ({ page }) => {
   // Validate the page title
   await expect(page).toHaveTitle(/OWASP Juice Shop/);
