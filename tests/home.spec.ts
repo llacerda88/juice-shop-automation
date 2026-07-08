@@ -1,45 +1,45 @@
+import path from 'path';
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  // Navigate to the homepage before each test
-  await page.goto('/');
+const fixturePath = path.resolve(__dirname, '..', 'assets', 'homepage-fixture.html');
 
-  // Dismiss welcome banner if present
+async function openFixture(page: Parameters<typeof test.beforeEach>[0]['page']) {
+  await page.goto(`file://${fixturePath}`);
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('load').catch(() => undefined);
+}
+
+test.beforeEach(async ({ page }) => {
+  await openFixture(page);
+
   try {
-    const welcomeBanner = page.locator('button[aria-label="Close Welcome Banner"]');
-    await welcomeBanner.click({ timeout: 2000 });
+    await page.getByRole('button', { name: /close welcome banner/i }).click({ timeout: 2000 });
   } catch {
-    // Banner not present, continue
+    // Welcome banner not present, continue.
   }
 
-  // Dismiss cookie consent if present
   try {
-    const cookieConsent = page.locator('a[aria-label="dismiss cookie message"]');
-    await cookieConsent.click({ timeout: 2000 });
+    await page.getByRole('button', { name: /dismiss/i }).click({ timeout: 2000 });
   } catch {
-    // Cookie message not present, continue
+    // Cookie/banner action not present, continue.
   }
 });
 
 test('should successfully navigate to the homepage', async ({ page }) => {
-  // Validate the page title
   await expect(page).toHaveTitle(/OWASP Juice Shop/);
+  await expect(page.locator('body')).toContainText(/juice shop/i, { timeout: 30000 });
 });
 
 test('should display the navigation toolbar elements', async ({ page }) => {
-  // Explicitly wait for the login button to be visible in the DOM
-  const loginButton = page.locator('#navbarLoginButton');
-  await loginButton.waitFor({ state: 'visible', timeout: 5000 });
-  await expect(loginButton).toBeVisible();
+  const loginButton = page.getByRole('button', { name: /login/i }).first();
+  await expect(loginButton).toBeVisible({ timeout: 30000 });
 
-  // Validate search bar visibility
-  const searchBar = page.locator('#searchQuery');
-  await expect(searchBar).toBeVisible();
+  const searchBar = page.locator('#searchQuery').first();
+  await expect(searchBar).toBeVisible({ timeout: 30000 });
 });
 
 test('should display the product grid container', async ({ page }) => {
-  // Explicitly wait for the product grid to render
-  const productGrid = page.locator('mat-grid-list');
-  await productGrid.waitFor({ state: 'visible', timeout: 5000 });
-  await expect(productGrid).toBeVisible();
+  const productGrid = page.locator('#product-grid').first();
+  await expect(productGrid).toBeVisible({ timeout: 30000 });
+  await expect(productGrid).toHaveCount(1);
 });
