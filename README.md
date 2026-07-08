@@ -2,12 +2,12 @@
 
 Automated E2E test suite for OWASP Juice Shop using Playwright. This project demonstrates a professional QA workflow, from test design to continuous integration.
 
-#QA Workflow
+# QA Workflow
 The following lifecycle ensures traceability and quality:
 
 User Story → Test Design (TestRail) → Manual Execution → Automation (Playwright) → Git Commit → Push → Pull Request → Merge
 
-#Technical Implementation Journey
+# Technical Implementation Journey
 This project was developed following these systematic steps:
 
 1. **Project Workspace Setup**: Environment preparation.
@@ -24,13 +24,13 @@ This project was developed following these systematic steps:
 12. **Page Title Assertion**: Validation of expected states.
 13. **Test Execution via IDE**: Final validation.
 
-#Tech Stack
+# Tech Stack
 - **Testing**: Playwright, TypeScript
 - **Management**: TestRail
 - **CI/CD**: GitHub Actions
 - **Version Control**: Git
 
-#Evidence & Reporting
+# Evidence & Reporting
 See the `/assets` folder for:
 - HTML test reports.
 - Execution logs and screenshots.
