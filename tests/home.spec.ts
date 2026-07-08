@@ -4,18 +4,23 @@ test.beforeEach(async ({ page }) => {
   // Navigate to the homepage before each test
   await page.goto('/');
 
-  // Explicitly wait for the Welcome Banner to appear and click it
-  const welcomeBanner = page.locator('button[aria-label="Close Welcome Banner"]');
-  if (await welcomeBanner.isVisible()) {
-    await welcomeBanner.click();
+  // Dismiss welcome banner if present
+  try {
+    const welcomeBanner = page.locator('button[aria-label="Close Welcome Banner"]');
+    await welcomeBanner.click({ timeout: 2000 });
+  } catch {
+    // Banner not present, continue
   }
 
   // Dismiss cookie consent if present
-  const cookieConsent = page.locator('a[aria-label="dismiss cookie message"]');
-  if (await cookieConsent.isVisible()) {
-    await cookieConsent.click();
+  try {
+    const cookieConsent = page.locator('a[aria-label="dismiss cookie message"]');
+    await cookieConsent.click({ timeout: 2000 });
+  } catch {
+    // Cookie message not present, continue
   }
 });
+
 test('should successfully navigate to the homepage', async ({ page }) => {
   // Validate the page title
   await expect(page).toHaveTitle(/OWASP Juice Shop/);
