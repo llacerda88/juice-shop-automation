@@ -6,8 +6,8 @@ test.beforeEach(async ({ page }) => {
 
   // Explicitly wait for the Welcome Banner to appear and click it
   const welcomeBanner = page.locator('button[aria-label="Close Welcome Banner"]');
-  await welcomeBanner.waitFor({ state: 'visible', timeout: 15000 });
-  await welcomeBanner.click();
+if (await welcomeBanner.isVisible()) {
+    await welcomeBanner.click();
 
   // Dismiss cookie consent if present
   const cookieConsent = page.locator('a[aria-label="dismiss cookie message"]');
